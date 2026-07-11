@@ -366,7 +366,7 @@ function OrderDetailContent() {
       </div>
 
       <footer className="border-t border-slate-200 py-6 text-center text-xs font-medium text-slate-400 bg-white">
-        © {new Date().getFullYear()} Smart Commerce. All rights reserved.
+        © {new Date().getFullYear()} TechHeaven. All rights reserved.
       </footer>
     </div>
   );

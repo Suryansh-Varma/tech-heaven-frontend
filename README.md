@@ -1,4 +1,4 @@
-# Smart Commerce — Next.js 15 E-Commerce Frontend
+# TechHeaven— Next.js 15 E-Commerce Frontend
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
@@ -18,13 +18,13 @@ A production-ready e-commerce store client built with Next.js 15 App Router, Typ
 - [E-Commerce Checkout Flow Sequence](#e-commerce-checkout-flow-sequence)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
-- [Key Pages & Directory Structure](#key-pages--directory-structure)
+- [Key Pages &amp; Directory Structure](#key-pages--directory-structure)
 
 ---
 
 ## Overview
 
-This repository houses the user interface for Smart Commerce. It offers a fluid, interactive web interface focusing on performance, responsive layout, and robust state management.
+This repository houses the user interface for Techheaven. It offers a fluid, interactive web interface focusing on performance, responsive layout, and robust state management.
 
 - **Stateless Session Integration**: Connects with backend JWT tokens securely stored and automatically injected into outbound requests via Axios interceptors.
 - **Client Side Cache**: State managed by Zustand for immediate UI responses on cart additions, coupon simulation, and profile details.
@@ -40,7 +40,7 @@ flowchart TD
         direction TB
         Page["Next.js Pages\n(App Router)"]
         Components["Reusable Components\n(Navbar / ProductCard)"]
-        
+      
         subgraph State Management
             AuthStore["Auth Store\n(Zustand / Hooks)"]
             CartStore["Cart Store\n(Zustand / LocalStorage)"]
@@ -100,16 +100,16 @@ sequenceDiagram
     User->>Cart: Clicks "Place Order" (COD/Card/UPI)
     Cart->>Service: checkout(CheckoutPayload)
     Service->>API: POST /orders/checkout {addressId, paymentMethod, couponCode}
-    
+  
     Note over API: Core Business Validation
     API->>API: Re-validate Coupon via CouponService
     API->>API: Verify Item Stock levels
     API->>API: Snapshot Address & Pricing Details
-    
+  
     API->>DB: Save Order & Create Payment Record
     API->>DB: Deduct Product Stock & Clear User Cart
     API-->>Cart: Return CheckoutResponse (Success)
-    
+  
     Cart->>User: Clear Zustand Cart & Redirect to /orders
     User->>Cart: View Order Details & Click "Download Invoice"
     Cart->>API: GET /orders/{orderId}/invoice
@@ -133,10 +133,12 @@ sequenceDiagram
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18.x or above
 - Local running backend API (defaulting to `http://localhost:8080`)
 
 ### Installation & Execution
+
 1. Clone the repository and navigate into it:
    ```bash
    cd ecommerce-store
