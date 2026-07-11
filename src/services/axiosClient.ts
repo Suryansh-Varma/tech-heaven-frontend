@@ -21,7 +21,7 @@ const axiosClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 second timeout — prevent hanging requests
+  timeout: 30000, // 30 second timeout — prevent hanging requests
 });
 
 // ─── REQUEST INTERCEPTOR ──────────────────────────────────────
