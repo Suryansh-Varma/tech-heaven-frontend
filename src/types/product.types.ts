@@ -8,10 +8,11 @@ export interface Product {
   id: number;
   name: string;
   cost: number;
-  image_url: string;
+  image_url?: string;
   imageUrl?: string;
   description?: string;
   category?: string;
+  stock: number;
 }
 
 // Shape of the array returned by GET /products

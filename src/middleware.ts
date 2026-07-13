@@ -26,7 +26,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ['/cart', '/myaccount', '/dashboard', '/orders'];
+const PROTECTED_ROUTES = ['/cart', '/myaccount', '/dashboard', '/orders', '/admin'];
 
 // Routes that should NOT be accessible when already logged in
 const AUTH_ROUTES = ['/login', '/signup', '/auth/signin', '/auth/signup'];

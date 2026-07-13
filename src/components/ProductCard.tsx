@@ -14,9 +14,15 @@ export default function ProductCard({ product }: { product: Product }) {
           loading="lazy"
         />
         {/* Minimalist Badge Overlay */}
-        <span className="absolute top-2 left-2 rounded border border-borders/85 bg-white/90 px-2 py-0.5 text-[9px] font-semibold text-slate-600 shadow-sm backdrop-blur-sm">
-          New Arrivals
-        </span>
+        {product.stock === 0 ? (
+          <span className="absolute top-2 left-2 rounded border border-red-200 bg-red-50 px-2 py-0.5 text-[9px] font-bold text-red-700 shadow-sm backdrop-blur-sm">
+            Out of Stock
+          </span>
+        ) : (
+          <span className="absolute top-2 left-2 rounded border border-borders/85 bg-white/90 px-2 py-0.5 text-[9px] font-semibold text-slate-600 shadow-sm backdrop-blur-sm">
+            New Arrivals
+          </span>
+        )}
       </div>
 
       {/* Product Info */}
