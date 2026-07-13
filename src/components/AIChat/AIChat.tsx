@@ -153,6 +153,15 @@ export default function AIChat() {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onClick={(e) => {
+          if (hasDragged) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+          }
+          // The button inside can also bubble clicks here (e.g. keyboard enter)
+          isOpen ? handleClose() : handleOpen();
+        }}
       >
         {/* Pulse ring — shows until first click */}
         {pulse && !isOpen && (
@@ -160,14 +169,6 @@ export default function AIChat() {
         )}
 
         <button
-          onClick={(e) => {
-            if (hasDragged) {
-              e.preventDefault();
-              e.stopPropagation();
-              return;
-            }
-            isOpen ? handleClose() : handleOpen();
-          }}
           title={isOpen ? 'Close AI Assistant' : 'Open AI Assistant'}
           className={`
             relative w-14 h-14 rounded-full shadow-xl flex items-center justify-center
