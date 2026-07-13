@@ -13,6 +13,7 @@ export interface Product {
   description?: string;
   category?: string;
   stock: number;
+  isAvailable?: boolean;
 }
 
 // Shape of the array returned by GET /products

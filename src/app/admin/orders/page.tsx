@@ -7,6 +7,7 @@ import type { Order } from '@/types/order.types';
 import DataTable, { TableColumn } from '@/components/admin/DataTable';
 import LoadingSkeleton from '@/components/admin/LoadingSkeleton';
 import ConfirmationDialog from '@/components/admin/ConfirmationDialog';
+import OrderDetailsModal from '@/components/admin/OrderDetailsModal';
 import { toast } from 'react-toastify';
 
 export default function AdminOrdersPage() {
@@ -17,6 +18,7 @@ export default function AdminOrdersPage() {
   
   const [cancelTarget, setCancelTarget] = useState<Order | null>(null);
   const [cancelling, setCancelling] = useState(false);
+  const [viewTarget, setViewTarget] = useState<Order | null>(null);
 
   const fetchOrders = () => {
     if (!user) return;
@@ -154,6 +156,12 @@ export default function AdminOrdersPage() {
         return (
           <div className="flex items-center gap-3">
             <button
+              onClick={() => setViewTarget(row)}
+              className="text-slate-600 hover:text-slate-900 font-bold text-[11px] uppercase tracking-wider flex items-center gap-1 transition-colors"
+            >
+              View
+            </button>
+            <button
               onClick={() => handleDownloadInvoice(row.orderId)}
               className="text-primary hover:underline font-bold text-[11px] uppercase tracking-wider flex items-center gap-1"
             >
@@ -223,6 +231,11 @@ export default function AdminOrdersPage() {
         isDanger
         onConfirm={handleCancelOrder}
         onCancel={() => setCancelTarget(null)}
+      />
+
+      <OrderDetailsModal
+        order={viewTarget}
+        onClose={() => setViewTarget(null)}
       />
     </div>
   );

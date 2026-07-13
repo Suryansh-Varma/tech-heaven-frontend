@@ -61,6 +61,18 @@ export default function AdminProductsPage() {
     }
   };
 
+  const handleToggleAvailability = async (product: Product) => {
+    try {
+      const updatedProduct = { ...product, isAvailable: !product.isAvailable };
+      await axiosClient.put(`/products/${product.id}`, updatedProduct);
+      toast.success(`Product "${product.name}" is now ${updatedProduct.isAvailable ? 'available' : 'unavailable'}.`);
+      fetchProducts(); // Refresh list to get updated status
+    } catch (err) {
+      console.error('Failed to toggle availability:', err);
+      toast.error('Failed to update product availability.');
+    }
+  };
+
   const columns: TableColumn<Product>[] = [
     {
       key: 'imageUrl',
@@ -102,9 +114,14 @@ export default function AdminProductsPage() {
       header: 'Stock',
       sortable: true,
       render: (row) => (
-        <span className={`font-semibold ${row.stock <= 5 ? 'text-amber-600 font-bold' : 'text-slate-700'}`}>
-          {row.stock} units
-        </span>
+        <div className="flex flex-col gap-0.5">
+          <span className={`font-semibold ${row.stock <= 5 ? 'text-amber-600 font-bold' : 'text-slate-700'}`}>
+            {row.stock} units
+          </span>
+          {row.isAvailable === false && (
+            <span className="text-[9px] font-bold text-rose-500 uppercase tracking-wide">Unavailable</span>
+          )}
+        </div>
       ),
     },
     {
@@ -124,6 +141,12 @@ export default function AdminProductsPage() {
           >
             Edit
           </Link>
+          <button
+            onClick={() => handleToggleAvailability(row)}
+            className={`${row.isAvailable === false ? 'text-emerald-500 hover:text-emerald-700' : 'text-amber-500 hover:text-amber-700'} font-bold text-[11px] uppercase tracking-wider`}
+          >
+            {row.isAvailable === false ? 'Enable' : 'Disable'}
+          </button>
           <button
             onClick={() => setDeleteTarget(row)}
             className="text-danger hover:text-red-700 font-bold text-[11px] uppercase tracking-wider"

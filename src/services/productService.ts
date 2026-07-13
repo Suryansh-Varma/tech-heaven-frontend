@@ -34,3 +34,14 @@ export async function getProductById(id: number | string): Promise<Product> {
   const response = await axiosClient.get<unknown>(`/products/${id}`);
   return unwrapResponse<Product>(response.data);
 }
+
+// ─── GET LOW STOCK PRODUCTS ──────────────────────────────────
+export async function getLowStockProducts(): Promise<Product[]> {
+  try {
+    const response = await axiosClient.get<unknown>('/products/low-stock');
+    return unwrapResponse<Product[]>(response.data);
+  } catch (error) {
+    console.error('Low Stock API Error:', error);
+    throw error;
+  }
+}

@@ -20,6 +20,13 @@ export default function AIChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [pulse, setPulse] = useState(true);
 
+  // Drag state
+  const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
+  const [hasDragged, setHasDragged] = useState(false);
+
   const { token, isAuthenticated } = useAuth();
   const { addToCart } = useCartStore();
   const auth = useAuth();
@@ -62,6 +69,54 @@ export default function AIChat() {
     setMessages([]);
   };
 
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    setIsDragging(true);
+    setDragStartPos({ x: e.clientX, y: e.clientY });
+    setHasDragged(false);
+    setDragOffset({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+    if (!position) {
+      setPosition({ left: rect.left, top: rect.top });
+    }
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStartPos.x;
+    const dy = e.clientY - dragStartPos.y;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+      setHasDragged(true);
+    }
+    setPosition({
+      left: e.clientX - dragOffset.x,
+      top: e.clientY - dragOffset.y,
+    });
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDragging) {
+      setIsDragging(false);
+      e.currentTarget.releasePointerCapture(e.pointerId);
+      
+      setPosition((prev) => {
+        if (!prev) return prev;
+        const btnSize = 56;
+        const maxLeft = typeof window !== 'undefined' ? window.innerWidth - btnSize : 1000;
+        const maxTop = typeof window !== 'undefined' ? window.innerHeight - btnSize : 1000;
+        
+        return {
+          left: Math.max(0, Math.min(maxLeft, prev.left)),
+          top: Math.max(0, Math.min(maxTop, prev.top)),
+        };
+      });
+    }
+  };
+
   return (
     <>
       {/* ── Chat Window (visible when open) ── */}
@@ -87,14 +142,32 @@ export default function AIChat() {
       )}
 
       {/* ── Floating Button ── */}
-      <div className="fixed bottom-6 right-6 z-[100]">
+      <div 
+        className={`fixed z-[100] ${!position ? 'bottom-6 right-6' : ''}`}
+        style={{
+          ...(position ? { left: position.left, top: position.top } : {}),
+          touchAction: 'none',
+          cursor: isDragging ? 'grabbing' : 'grab'
+        }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
         {/* Pulse ring — shows until first click */}
         {pulse && !isOpen && (
           <span className="absolute inset-0 rounded-full bg-blue-500 opacity-30 animate-ping" />
         )}
 
         <button
-          onClick={isOpen ? handleClose : handleOpen}
+          onClick={(e) => {
+            if (hasDragged) {
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
+            isOpen ? handleClose() : handleOpen();
+          }}
           title={isOpen ? 'Close AI Assistant' : 'Open AI Assistant'}
           className={`
             relative w-14 h-14 rounded-full shadow-xl flex items-center justify-center

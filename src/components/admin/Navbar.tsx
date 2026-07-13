@@ -3,6 +3,8 @@
 import { useAuth } from '@/hooks/useAuth';
 import SearchBar from './SearchBar';
 import { useState, useRef, useEffect } from 'react';
+import { getLowStockProducts } from '@/services/productService';
+import type { Product } from '@/types/product.types';
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -32,13 +34,24 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
   const adminEmail = user?.email || 'admin@techheaven.com';
   const avatarLetter = adminName.charAt(0).toUpperCase();
 
-  const mockNotifications = [
-    { id: 1, title: 'Low Stock Alert', desc: 'Product "Wireless Mouse" is down to 2 units.', time: '10m ago', unread: true },
-    { id: 2, title: 'Coupon Applied', desc: 'Coupon "SAVE20" was applied to Order #104.', time: '1h ago', unread: true },
-    { id: 3, title: 'New Customer Registered', desc: 'User "John Doe" signed up.', time: '4h ago', unread: false },
-  ];
+  const [lowStockProducts, setLowStockProducts] = useState<Product[]>([]);
+  
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      try {
+        const products = await getLowStockProducts();
+        setLowStockProducts(products);
+      } catch (error) {
+        console.error('Failed to fetch alerts:', error);
+      }
+    };
+    fetchAlerts();
+    // Refresh alerts every 5 minutes
+    const interval = setInterval(fetchAlerts, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-  const hasUnread = mockNotifications.some(n => n.unread);
+  const hasUnread = lowStockProducts.length > 0;
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-200/80 bg-white/80 backdrop-blur-md px-6 shadow-sm font-sans">
@@ -83,17 +96,25 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
                 <button className="text-[10px] text-primary hover:underline font-bold">Mark all read</button>
               </div>
               <div className="divide-y divide-slate-50 max-h-64 overflow-y-auto">
-                {mockNotifications.map((n) => (
-                  <div key={n.id} className={`p-4 flex gap-3 transition-colors hover:bg-slate-50 ${n.unread ? 'bg-slate-50/40' : ''}`}>
-                    <div className="flex-1 space-y-1">
-                      <div className="flex justify-between items-start gap-2">
-                        <span className={`font-semibold ${n.unread ? 'text-slate-900' : 'text-slate-700'}`}>{n.title}</span>
-                        <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap">{n.time}</span>
-                      </div>
-                      <p className="text-slate-500 text-[11px] leading-relaxed">{n.desc}</p>
-                    </div>
+                {lowStockProducts.length === 0 ? (
+                  <div className="p-6 text-center text-slate-500 text-xs">
+                    No new alerts
                   </div>
-                ))}
+                ) : (
+                  lowStockProducts.map((p) => (
+                    <div key={p.id} className="p-4 flex gap-3 transition-colors hover:bg-slate-50 bg-slate-50/40">
+                      <div className="flex-1 space-y-1">
+                        <div className="flex justify-between items-start gap-2">
+                          <span className="font-semibold text-rose-600">Low Stock Alert</span>
+                          <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap">Now</span>
+                        </div>
+                        <p className="text-slate-600 text-[11px] leading-relaxed">
+                          Product "{p.name}" {p.isAvailable === false ? 'is currently marked as unavailable.' : `is down to ${p.stock} units.`}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           )}

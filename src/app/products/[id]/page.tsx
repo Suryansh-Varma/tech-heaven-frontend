@@ -191,7 +191,7 @@ export default function ProductPage() {
                 <div className="space-y-4">
                   
                   {/* Category / Tags */}
-                  {product.stock > 0 ? (
+                  {(product.stock > 0 && product.isAvailable !== false) ? (
                     <span className="inline-flex items-center rounded border border-blue-100 bg-blue-50/50 px-2 py-0.5 text-[9px] font-semibold text-primary">
                       In Stock
                     </span>
@@ -235,7 +235,7 @@ export default function ProductPage() {
                     </span>
                   </div>
 
-                  {product.stock > 0 ? (
+                  {(product.stock > 0 && product.isAvailable !== false) ? (
                     <button
                       onClick={handleAddToCart}
                       className="inline-flex items-center justify-center gap-2 px-5 py-2 bg-primary hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition-colors duration-150"

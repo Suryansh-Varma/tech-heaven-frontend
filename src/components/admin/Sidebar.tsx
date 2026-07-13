@@ -111,8 +111,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       >
         {/* Logo/Brand */}
         <div className="flex items-center gap-2 px-3 pb-8">
-          <div className="h-8 w-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">
-            TH
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-dark text-white shadow-sm">
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </div>
           <span className="font-bold text-slate-900 tracking-tight text-lg">Tech Heaven</span>
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200/80 text-slate-500 font-bold uppercase select-none">

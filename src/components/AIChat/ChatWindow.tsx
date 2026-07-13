@@ -203,7 +203,7 @@ export default function ChatWindow({ token, onAddToCart, onClose, onClear, messa
           </button>
         </div>
         <p className="text-[10px] text-gray-400 text-center mt-1.5">
-          {token ? '🔒 Personalised mode — accessing your account data' : '🔓 Sign in for personalised support'}
+          {token ? 'Personalised mode — accessing your account data' : 'Sign in for personalised support'}
         </p>
       </div>
     </div>

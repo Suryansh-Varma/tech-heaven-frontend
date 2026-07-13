@@ -14,7 +14,7 @@ export default function ProductCard({ product }: { product: Product }) {
           loading="lazy"
         />
         {/* Minimalist Badge Overlay */}
-        {product.stock === 0 ? (
+        {(product.stock === 0 || product.isAvailable === false) ? (
           <span className="absolute top-2 left-2 rounded border border-red-200 bg-red-50 px-2 py-0.5 text-[9px] font-bold text-red-700 shadow-sm backdrop-blur-sm">
             Out of Stock
           </span>
