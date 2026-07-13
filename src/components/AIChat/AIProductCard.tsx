@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function AIProductCard({ product, onAddToCart }: Props) {
-  const inStock = product.stock > 0 && product.isAvailable !== false;
+  const inStock = product.stock > 0;
 
   return (
     <div className="flex items-start gap-3 bg-white border border-gray-100 rounded-xl p-3 hover:shadow-md transition-shadow duration-200 w-full">
