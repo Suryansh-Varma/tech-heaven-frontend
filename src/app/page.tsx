@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import ReflectiveCard from '@/components/ReflectiveCard';
-import GooeyNav from '@/components/GooeyNav';
 import { getProducts } from '@/services/productService';
 import type { Product } from '@/types/product.types';
 
